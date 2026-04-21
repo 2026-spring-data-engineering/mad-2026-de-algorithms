@@ -48,8 +48,10 @@ def analyze(diabetes_df):
     # print("Model trained. Coefficients:", model.coef_)
     # print("Intercept:", model.intercept_)
     
-    # Train a logistic regression model on the training set.
-    algorithm = LogisticRegression(max_iter=1000)
+    # # Train a logistic regression model on the training set.
+    # algorithm = LogisticRegression(max_iter=1000)
+    # Switch to the random forest classifier.
+    algorithm = RandomForestClassifier()
     model = algorithm.fit(diabetes_predictors_training_df, diabetes_response_training_df.values.ravel())
     predictions = model.predict(diabetes_predictors_testing_df)
 
