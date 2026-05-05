@@ -1,8 +1,36 @@
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import sklearn.model_selection as ms
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
+
+
+def show_confusion_matrix(actual, predicted):
+    """Display a confusion matrix with TP in upper left and TN in bottom right, axes switched."""
+    cm = confusion_matrix(actual, predicted)
+    # Switch axes: x-axis = true label, y-axis = predicted label
+    cm_switched = cm.T
+    # Flip both axes to put TP in upper left and TN in bottom right
+    cm_flipped = np.flipud(np.fliplr(cm_switched))
+    plt.imshow(cm_flipped, interpolation='nearest', cmap=plt.cm.Blues)
+    plt.title('Confusion Matrix (TP upper left, TN bottom right)')
+    plt.colorbar()
+    tick_marks = np.arange(2)
+    plt.xticks(tick_marks, ['Positive', 'Negative'])
+    plt.yticks(tick_marks, ['Positive', 'Negative'])
+    plt.xlabel('True label')
+    plt.ylabel('Predicted label')
+    # Annotate cells
+    thresh = cm_flipped.max() / 2.
+    for i in range(cm_flipped.shape[0]):
+        for j in range(cm_flipped.shape[1]):
+            plt.text(j, i, format(cm_flipped[i, j], 'd'),
+                     ha="center", va="center",
+                     color="white" if cm_flipped[i, j] > thresh else "black")
+    plt.tight_layout()
+    plt.show()
 
 
 def show_prediction_results(actual_data, predictions):
@@ -56,6 +84,7 @@ def analyze(diabetes_df):
     predictions = model.predict(diabetes_predictors_testing_df)
 
     show_prediction_results(diabetes_response_testing_df, predictions)
+    show_confusion_matrix(diabetes_response_testing_df.values.ravel(), predictions)
 
 
 def main():
