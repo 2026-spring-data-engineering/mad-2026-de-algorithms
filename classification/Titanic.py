@@ -44,6 +44,19 @@ def predict(titanic_df):
     accuracy = metrics.accuracy_score(titanic_response_testing_df, prediction)
     print('Sklearn accuracy: {0}'.format(accuracy))
 
+    # Add confusion matrix
+    cm = metrics.confusion_matrix(titanic_response_testing_df, prediction)
+    print('Confusion Matrix:')
+    print(cm)
+
+    # Visualize confusion matrix
+    plt.figure(figsize=(6,4))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['Not Survived', 'Survived'], yticklabels=['Not Survived', 'Survived'])
+    plt.title('Confusion Matrix')
+    plt.ylabel('Actual')
+    plt.xlabel('Predicted')
+    plt.show()
+
 
 def main():
     titanic_df = pd.read_csv('Titanic-Dataset.csv')
